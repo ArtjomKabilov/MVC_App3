@@ -1,0 +1,16 @@
+﻿@model MVC_App.Models.Party
+@{
+	ViewBag.Title = "Uss pidu";
+}
+
+<h2>Ankeet</h2>
+@using (Html.BeginForm())
+{
+	@Html.ValidationSummary()
+	<p>Sisesta nimi: @Html.TextBoxFor(x => x.Name)</p>
+	<p>Sisesta date: @Html.TextBoxFor(x => x.Date)</p>
+
+
+	<input type="submit"  value="Saada vastu"/>
+}
+

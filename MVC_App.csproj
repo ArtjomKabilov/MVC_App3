@@ -180,6 +180,8 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Party.cs" />
+    <Compile Include="Models\PartyContext.cs" />
+    <Compile Include="Models\PartyDBInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -250,6 +252,11 @@
     <Content Include="Views\Home\Create.cshtml" />
     <Content Include="Views\Home\Delete.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
+    <Content Include="Views\Home\Partys.cshtml" />
+    <Content Include="Views\Home\Pidu.cshtml" />
+    <Content Include="Views\Home\Done.cshtml" />
+    <Content Include="Views\Home\Kustutada.cshtml" />
+    <Content Include="Views\Home\Umbertegemine.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

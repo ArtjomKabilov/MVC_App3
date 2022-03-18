@@ -12,20 +12,20 @@ namespace MVC_App.Controllers
     public class HomeController : Controller
     {
         int month;
-        
+
         public ActionResult Index()
         {
-            
-            
+
+
             int hour = DateTime.Now.Hour;
-            ViewBag.Greeting = hour < 12 && hour > 4  ? "Tere hommikust!" : "Tere päevast";
+            ViewBag.Greeting = hour < 12 && hour > 4 ? "Tere hommikust!" : "Tere päevast";
             ViewBag.Greeting = hour < 16 && hour > 12 ? "Tere päevast!" : "Tere õhtust";
             ViewBag.Greeting = hour > 16 && hour < 20 ? "Tere õhtust" : "Head ööd";
             ViewBag.Greeting = hour > 20 && hour < 4 ? "Head ööd" : "Tere hommikust!";
             string[] peod = new string[12] { "Uus aasta", "Taasiseseisvumispäev, Eesti Vabariigi aastapäev"
                 , "Naistepäev", "Kosmonautikapäev", "Emadepäev", "Lastepäev", "Ülemaailmne vaalade ja delfiinide päev"
                 , "Naistepäev", "Taganttuule päev", "Viisakate inimeste päev", "Rahvusvaheline loomade mälestuspäev", "Uus aasta" };
-            
+
             month = DateTime.Now.Month;
             /*string pidu ="";
             if (DateTime.Now.Month == 1){pidu = "Uus aasta";}
@@ -45,7 +45,7 @@ namespace MVC_App.Controllers
         }
         [HttpGet]
         public ViewResult Ankeet()
-        { 
+        {
 
             return View();
         }
@@ -59,7 +59,7 @@ namespace MVC_App.Controllers
                 db.SaveChanges();
                 ViewBag.Greeting = guest.Email;
                 return View("Aitäh", guest);
-                
+
             }
             else
             {
@@ -82,10 +82,10 @@ namespace MVC_App.Controllers
                 WebMail.UserName = "programmeeriminetthk2@gmail.com";
                 WebMail.Password = "2.kuursus tarpv20";
                 WebMail.From = "programmeeriminetthk2@gmail.com";
-                WebMail.Send("artem1223148@gmail.com", "Vastus kutsele",guest.Name + " vastas " + ((guest.WillAttend ?? false) ?
+                WebMail.Send("artem1223148@gmail.com", "Vastus kutsele", guest.Name + " vastas " + ((guest.WillAttend ?? false) ?
                     "tuleb peole, " + peod[month - 1] + "  " : " ei tule peole"));
                 WebMail.Send(guest.Email, "Vastus kutsele", guest.Name + " vastas " + ((guest.WillAttend ?? false) ?
-                    "tuleb peole, "+ peod[month - 1] + "  ": " ei tule peole"));
+                    "tuleb peole, " + peod[month - 1] + "  " : " ei tule peole"));
                 ViewBag.Message = "Kiri on saatnud";
             }
             catch (Exception)
@@ -94,7 +94,7 @@ namespace MVC_App.Controllers
                 ViewBag.Message = "Mul on kahju! Ei saa kirja saada!!!";
             }
         }
-        
+
 
         public ActionResult About()
         {
@@ -176,5 +176,65 @@ namespace MVC_App.Controllers
             IEnumerable<Guest> guests = db.Guests.Where(g => g.WillAttend == true);
             return View(guests);
         }
+        PartyContext dd = new PartyContext();
+        [Authorize]
+        public ActionResult Partys()
+        {
+            IEnumerable<Party> partys = dd.Partys;
+            return View(partys);
+        }
+        public ActionResult Done()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Done(Party partys)
+        {
+            dd.Partys.Add(partys);
+            dd.SaveChanges();
+            return RedirectToAction("Partys");
+        }
+
+        [HttpGet]
+        public ActionResult Kustutada(int id)
+        {
+            Party e = dd.Partys.Find(id);
+            if (e == null)
+            {
+                return HttpNotFound();
+            }
+            return View(e);
+        }
+
+        [HttpGet, ActionName("Kustutada")]
+        public ActionResult DelConfirmed(int id)
+        {
+            Party e = dd.Partys.Find(id);
+            if (e == null)
+            {
+                return HttpNotFound();
+            }
+            dd.Partys.Remove(e);
+            dd.SaveChanges();
+            return RedirectToAction("Partys");
+        }
+        [HttpGet]
+        public ActionResult Umbertegemine(int? id)
+        {
+            Party e = dd.Partys.Find(id);
+            if (e == null)
+            {
+                return HttpNotFound();
+            }
+            return View(e);
+        }
+        [HttpGet, ActionName("Umbertegemine")]
+        public ActionResult EdConfirmed(Party partys)
+        {
+            dd.Entry(partys).State = EntityState.Modified;
+            dd.SaveChanges();
+            return RedirectToAction("Partys");
+        }
+        
     }
 }
